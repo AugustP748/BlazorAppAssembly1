@@ -2,10 +2,14 @@
 @using blazorappdemo;
 @inject ILogger<Products> logger;
 @inject IProductService productService;
+@inject NavigationManager NavigationManager;
+
 
 <PageTitle>Products</PageTitle>
 
 <ModuleTitle Title="Products" />
+
+<button class="btn btn-dark" @onclick="@(() => NavigationManager.NavigateTo("/addproduct"))">+ New Product</button>
 
 
 @if (products?.Count > 0)
