@@ -46,6 +46,17 @@ public class ProductService : IProductService
             throw new ApplicationException(content);
         }
     }
+
+    public async Task Edit(int productId)
+    {
+        //Modificar
+        var response = await client.DeleteAsync($"v1/products/{productId}");
+        var content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new ApplicationException(content);
+        }
+    }
 }
 
 public interface IProductService
@@ -55,4 +66,6 @@ public interface IProductService
     Task Add(Product product);
 
     Task Delete(int productId);
+
+    Task Edit(int productId);
 }
