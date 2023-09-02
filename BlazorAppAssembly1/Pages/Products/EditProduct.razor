@@ -1,4 +1,4 @@
-﻿@page "/editproduct/{id_product}"
+﻿@page "/editproduct/{id}"
 @using blazorappdemo;
 @inject IProductService productService;
 @inject ICategoryService categoryService;
@@ -54,12 +54,14 @@
     [EditorRequired]
     public int id_product { set; get; }
 
-    private Product product = new();
+    //private Product product = new();
     private List<Category> categories = new List<Category>();
 
     protected override async Task OnInitializedAsync()
     {
         categories = await categoryService.Get();
+        Product productToUpdate = product;
+
     }
 
     private async Task Save()

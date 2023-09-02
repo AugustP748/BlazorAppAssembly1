@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using BlazorAppAssembly1.Pages.Products;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace blazorappdemo;
@@ -27,6 +28,14 @@ public class ProductService : IProductService
         return JsonSerializer.Deserialize<List<Product>>(content, options);
     }
 
+    public async Task<Product> GetID(int productId)
+    {
+        var response = await client.GetAsync($"v1/products/{productId}");
+        var content = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode) throw new ApplicationException(content);
+        return JsonSerializer.Deserialize<Product>(content, Serializer);
+    }
+
     public async Task Add(Product product)
     {
         var response = await client.PostAsync("v1/products", JsonContent.Create(product));
@@ -47,15 +56,12 @@ public class ProductService : IProductService
         }
     }
 
-    public async Task Edit(int productId)
+    public async Task Edit(Product product)
     {
         //Modificar
-        var response = await client.DeleteAsync($"v1/products/{productId}");
+        var response = await client.PutAsync($"v1/products/{product.Id}", JsonContent.Create(product));
         var content = await response.Content.ReadAsStringAsync();
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new ApplicationException(content);
-        }
+        if (!response.IsSuccessStatusCode) throw new ApplicationException(content);
     }
 }
 
@@ -63,9 +69,11 @@ public interface IProductService
 {
     Task<List<Product>?> Get();
 
+    Task<Product> GetID(int productId);
+
     Task Add(Product product);
 
     Task Delete(int productId);
 
-    Task Edit(int productId);
+    Task Edit(Product product);
 }
