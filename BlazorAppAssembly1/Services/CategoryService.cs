@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using BlazorAppAssembly1.Pages.Products;
+using System.Text.Json;
 
 namespace blazorappdemo;
 
@@ -23,6 +24,15 @@ public class CategoryService : ICategoryService
 
         return JsonSerializer.Deserialize<List<Category>>(content, options);
     }
+
+    //public async Task<Category> GetCategory(Category IdCategory)
+    //{
+    //    var response = await client.GetAsync($"v1/products/{productId}");
+    //    var content = await response.Content.ReadAsStringAsync();
+    //    if (!response.IsSuccessStatusCode) throw new ApplicationException(content);
+    //    return JsonSerializer.Deserialize<Product>(content, options);
+    //}
+
 }
 
 public interface ICategoryService

@@ -9,7 +9,7 @@
 <ModuleTitle Title="Edit Product"></ModuleTitle>
 
 <button class="btn btn-dark" @onclick="@(() => NavigationManager.NavigateTo("/product"))">Volver</button>
-@*<EditForm Model="@product" OnSubmit="@Save">
+<EditForm Model="@product" OnSubmit="@Save">
     <div class="row">
         <div class="col-8 form-group">
             <label for="Title" class="col-form-label">Title</label>
@@ -45,13 +45,11 @@
     </div>
 
     <hr />
-    <button class="btn btn-primary" type="submit">Save</button>
-</EditForm>*@
+    <button class="btn btn-success" type="submit">Save</button>
+</EditForm>
 
 @code {
-
     [Parameter]
-    [EditorRequired]
     public string id { set; get; }
 
     private Product product = new();
@@ -71,8 +69,12 @@
     protected override async Task OnInitializedAsync()
     {
         categories = await categoryService.Get();
-        product = await productService.GetID(int.Parse(id));
-        //Product productToUpdate = product;
+        if (int.TryParse(id, out int result))
+        {
+            // Parsing succeeded, 'result' contains the integer value
+            product = await productService.GetProductAsync(int.Parse(id));
+        }
+        Console.WriteLine("The image is: "+product.CategoryId);
 
     }
 
