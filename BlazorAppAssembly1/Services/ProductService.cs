@@ -33,7 +33,7 @@ public class ProductService : IProductService
         var response = await client.GetAsync($"v1/products/{productId}");
         var content = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode) throw new ApplicationException(content);
-        return JsonSerializer.Deserialize<Product>(content, Serializer);
+        return JsonSerializer.Deserialize<Product>(content, options);
     }
 
     public async Task Add(Product product)

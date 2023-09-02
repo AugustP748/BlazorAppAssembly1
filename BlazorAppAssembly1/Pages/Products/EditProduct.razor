@@ -9,7 +9,7 @@
 <ModuleTitle Title="Edit Product"></ModuleTitle>
 
 <button class="btn btn-dark" @onclick="@(() => NavigationManager.NavigateTo("/product"))">Volver</button>
-<EditForm Model="@product" OnSubmit="@Save">
+@*<EditForm Model="@product" OnSubmit="@Save">
     <div class="row">
         <div class="col-8 form-group">
             <label for="Title" class="col-form-label">Title</label>
@@ -46,21 +46,33 @@
 
     <hr />
     <button class="btn btn-primary" type="submit">Save</button>
-</EditForm>
+</EditForm>*@
 
 @code {
 
     [Parameter]
     [EditorRequired]
-    public int id_product { set; get; }
+    public string id { set; get; }
 
-    //private Product product = new();
+    private Product product = new();
     private List<Category> categories = new List<Category>();
+
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        if (parameters.TryGetValue<string>(nameof(id), out var value))
+        {
+            if (value is not null)
+                id = value;
+        }
+        await base.SetParametersAsync(parameters);
+    }
 
     protected override async Task OnInitializedAsync()
     {
         categories = await categoryService.Get();
-        Product productToUpdate = product;
+        product = await productService.GetID(int.Parse(id));
+        //Product productToUpdate = product;
 
     }
 
